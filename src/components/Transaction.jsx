@@ -1,31 +1,21 @@
-import React,{useState} from 'react'
+import React,{useContext} from "react";
+import { GlobalContext } from "../Context/Globalstate";
 
-export const Transaction = () => {
+export const Transaction = ({ transaction }) => {
+   const {deleteTransaction} = useContext(GlobalContext);
 
-    const[text,setText]=useState();
-    const [Amount,setAmount] = useState (0);
-  
+  const sign = transaction.amount < 0 ? "-" : "+";
+
+
   return (
-    <>
-      <h3>Add new Transaction</h3>
-      <form>
-      <div className='form-control'>
-        <label htmlFor='text'>Text</label>
-        <input type='text' value={text} onChange={(e) =>setText(e.target.value)} placeholder='Enter text.....'/>
-      </div>
-      <div className='form-control'>
-
-        <label htmlFor='amount'>
-          Amount <br />
-          (negative - expense, positive - income)
-        </label>
-        <input type='number'value={Amount} onChange={(e)=>setAmount(e.target.value)} placeholder='Enter amount.....'/>
-         <button className='btn'>Add transaction</button>
-
-      </div>
-      </form>
-    </>
-  )
-}
-
-
+    <div>
+      <li className={transaction.amount < 0 ? "minus" : "plus"}>
+        {transaction.text}
+        <span>
+          {sign}${Math.abs(transaction.amount)}
+        </span>
+        <button onClick={() =>deleteTransaction(transaction.id)} className="delete-btn">x</button>
+      </li>
+    </div>
+  );
+};
